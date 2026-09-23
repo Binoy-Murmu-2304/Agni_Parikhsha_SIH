@@ -1,7 +1,7 @@
 import pandas as pd
 from typing import Dict, Any
 
-from agnipariksha.config import FAMILY_SPECS, DEFAULT_W_FN
+from agnipariksha.config import FAMILY_SPECS, DEFAULT_W_FN, CAPABILITY_ROUTING
 
 class AgniEvaluator:
     def __init__(self, w_fp: float = 1.0, w_fn: float = DEFAULT_W_FN):
@@ -27,10 +27,17 @@ class AgniEvaluator:
         def evaluate_final(row):
             if row['trigger_module_a'] == 1: return 1
             if row['trigger_safety_slope'] == 1: return 1
-            # ConfBreach fires 0%, removed from final_flag as per F4
             return 0
             
+        def evaluate_disposition(row):
+            if CAPABILITY_ROUTING.get(row['family']) == 'MANDATORY_FULL_BURN_IN':
+                return 'FULL_BURN_IN'
+            if row['final_flag'] == 1:
+                return 'RED'
+            return 'GREEN'
+            
         df_b['final_flag'] = df_b.apply(evaluate_final, axis=1)
+        df_b['disposition'] = df_b.apply(evaluate_disposition, axis=1)
         return df_b
 
     def calculate_score(self, fp, fn, n_total, w_fn=None):
@@ -57,9 +64,10 @@ class AgniEvaluator:
                 df_def_pool = df_fam_pool[df_fam_pool['is_defective'] == 1]
                 if len(df_def_pool) < n_def:
                     raise ValueError(f"Insufficient defectives in family {fam}")
-                df_def = df_def_pool.sample(n=n_def, random_state=42)
+                df_def = df_def_pool.sample(n=n_def, random_state=42 + int(str(lot_id).split('_')[-1]))
                 
                 df_eval = pd.concat([df_def, df_neg]).reset_index(drop=True)
+                assert len(df_eval['component_id'].unique()) == len(df_eval), "Duplicate component_ids in evaluation frame!"
                 dfs_res.append(self.end_to_end_disposition(df_eval, module_a, module_b, k_noise=k_noise))
                 
             df_res = pd.concat(dfs_res)
@@ -69,6 +77,8 @@ class AgniEvaluator:
             fn = len(df_res[(df_res['is_defective'] == 1) & (df_res['final_flag'] == 0)])
             fp = len(df_res[(df_res['is_defective'] == 0) & (df_res['final_flag'] == 1)])
             tn = len(df_res[(df_res['is_defective'] == 0) & (df_res['final_flag'] == 0)])
+            
+            escape_fn = len(df_res[(df_res['is_defective'] == 1) & (df_res['disposition'] == 'GREEN')])
             n_def_actual = tp + fn
             n_neg_actual = fp + tn
             recall = tp / max(1, n_def_actual)
@@ -89,14 +99,27 @@ class AgniEvaluator:
                 rec_ci = prop_ci(tp, n_def_actual, alpha=0.05)
                 fpr_ci = prop_ci(fp, n_neg_actual, alpha=0.05)
                 
+            sc10 = self.calculate_score(fp, fn, n_total, w_fn=10)
+            sc50 = self.calculate_score(fp, fn, n_total, w_fn=50)
+            sc100 = self.calculate_score(fp, fn, n_total, w_fn=100)
+            sc50_escape = self.calculate_score(fp, escape_fn, n_total, w_fn=50)
+            
             results.append({
                 "Prevalence": f"{rate*100:.1f}%",
                 "N": n_total,
                 "n_def": n_def_actual,
+                "TP": tp,
+                "FN": fn,
+                "Escape-FN": escape_fn,
+                "FP": fp,
                 "Recall (bound)": f"{recall*100:.2f}% [{rec_ci[0]*100:.2f}%, {rec_ci[1]*100:.2f}%]",
                 "FPR (bound)": f"{fpr*100:.2f}% [{fpr_ci[0]*100:.2f}%, {fpr_ci[1]*100:.2f}%]",
                 "Precision": f"{precision*100:.2f}%",
                 "False Withdrawals / 1000": round(fw_1000, 1),
+                "Sc10": round(sc10, 1),
+                "Sc50": round(sc50, 1),
+                "Sc50 (Escape)": round(sc50_escape, 1),
+                "Sc100": round(sc100, 1),
                 "Provenance": "DEVELOPMENT"
             })
         return pd.DataFrame(results)

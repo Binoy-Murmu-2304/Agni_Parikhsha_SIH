@@ -17,7 +17,19 @@
 **B3 Exit Rates on FINAL_EVAL (5.0% prevalence): 33.56%**
 
 ## 3. Generalization Analysis
-- The model generalizes exceptionally well to the 10 completely unseen FINAL_EVAL lots.
-- **Recall Variance:** FINAL_EVAL shifted recall from ~78.9% down to ~73.3% at 0.5% prevalence, but shifted *up* from ~73.2% to ~76.4% at 5.0% prevalence. In both cases, the FINAL_EVAL measurements sit comfortably inside the wide binomial confidence bounds of the DEVELOPMENT set, confirming that the variance is purely lot-to-lot sampling variance on a small {lots}=10$ set.
+- The model generalizes exceptionally well to 10 unseen lots from the same frozen AGNI-SIM physics (synthetic scope unchanged).
+- **Recall Variance:** FINAL_EVAL shifted recall from ~78.9% down to ~73.3% at 0.5% prevalence, but shifted *up* from ~73.2% to ~76.4% at 5.0% prevalence. The two-proportion z-test confirms this difference is not statistically significant (5% row: z?1.58, p?0.11; 0.5% row: z?0.87, p?0.38), indicating the variance is purely lot-to-lot sampling variance on a small N_lots=10 set.
 - **FPR:** False positives actually *decreased* on the final eval set (down from 0.12% to 0.04%-0.05%).
-- **Bottom Line:** There is zero evidence of test-set overfitting. The architecture maintains its structural capability floor on completely blind physical distributions.
+- **Bottom Line:** There is zero evidence of test-set overfitting. The architecture maintains its structural capability floor on unseen lots from the same physics distribution.
+
+## 4. Escape-FN Disaggregation
+| Family | Disposition Path | DEV Escapes | FINAL_EVAL Escapes |
+|---|---|---|---|
+| DIGITAL_IC | Routed (FULL_BURN_IN) | 0 | 0 |
+| MIXED_SIGNAL_IC | Routed (FULL_BURN_IN) | 0 | 0 |
+| PRECISION_VOLTAGE_REF | Routed (FULL_BURN_IN) | 0 | 0 |
+| MEMS_GYROSCOPE | Auto-Passable (GREEN) | 48 | 51 |
+| IMAGE_SENSOR | Auto-Passable (GREEN) | 46 | 47 |
+
+- **Structural statement**: Routed families contribute zero escapes by construction.
+- **Auto-passable-family Escape Rate (FINAL_EVAL)**: 98 escapes out of 356 auto-passable family defects = 27.53% [95% Clopper-Pearson CI: 22.95%, 32.48%].

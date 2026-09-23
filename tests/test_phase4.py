@@ -70,8 +70,6 @@ def test_physics_mapping_and_shap():
         explainer=explainer
     )
     
-    assert os.path.exists(filepath)
-    with open(filepath, "r") as f:
-        content = f.read()
-        assert "AGNI PARIKSHA - QA Disposition Card" in content
-        assert comp_id in content
+    content = filepath
+    assert "AGNI PARIKSHA - QA Disposition Card" in content
+    assert comp_id in content

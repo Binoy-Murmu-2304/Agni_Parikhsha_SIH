@@ -69,19 +69,18 @@ class AgniExplainer:
         
     def get_physics_narrative(self, feature_name: str, shap_val: float) -> str:
         """
-        Maps a top feature to a plain-language physics rationale (D9).
+        Honest feature descriptions with magnitude scaling.
         """
         direction = "increasing" if shap_val > 0 else "decreasing"
         
-        if feature_name == "EM_stress":
-            return f"High Electromigration (current-density) stress is {direction} the 168h forecast."
-        elif feature_name == "SRH_kinetics":
-            return f"Saturating SRH trap kinetics are {direction} the parameter, consistent with oxide degradation."
-        elif feature_name == "creep_log_time":
-            return f"Viscoelastic creep profile suggests mechanical stress {direction} the drift."
-        elif feature_name == "arrhenius_drift":
-            return f"Arrhenius temperature acceleration is {direction} the expected degradation."
-        elif feature_name == "slope_24h":
-            return f"The measured 0-24h drift rate is strongly {direction} the forecast."
+        mag = abs(shap_val)
+        adverb = "strongly " if mag > 1.0 else ("slightly " if mag < 0.1 else "")
+        
+        if feature_name == "slope_24h":
+            return f"The measured 0-24h drift rate is {adverb}{direction} the forecast."
+        elif feature_name == "val_24h":
+            return f"The parameter level at 24h is {adverb}{direction} the forecast."
+        elif feature_name == "val_0h":
+            return f"The baseline level at 0h is {adverb}{direction} the forecast."
         else:
-            return f"Baseline parameter {feature_name} is {direction} the outcome."
+            return f"Parameter {feature_name} is {adverb}{direction} the outcome."

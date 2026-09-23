@@ -3,6 +3,7 @@ QA Justification Card Generator
 """
 import os
 import pandas as pd
+from agnipariksha.config import FAMILY_SPECS
 from typing import Dict, Any
 
 class QACardGenerator:
@@ -17,8 +18,23 @@ class QACardGenerator:
     def generate_card(self, comp_id: str, family: str, verdict: str, 
                       risk_tier: str, measured_24h: float, pred_168h: float, 
                       margin: float, conformal_90: float, 
-                      explanation: Dict[str, Any], explainer) -> str:
+                      explanation: Dict[str, Any], explainer,
+                      module_a_outlier: bool = False, safety_slope_breach: bool = False,
+                      capability_fallback: bool = False) -> str:
         
+        conf_str = f"+/- {conformal_90:.2f}" if conformal_90 else "not computed"
+        spec = FAMILY_SPECS.get(family, {})
+        spec_max = spec.get('spec_max', 0)
+        unit = spec.get('unit', '')
+        spec_str = ""
+        if spec_max:
+            if pred_168h > spec_max:
+                spec_str = f"{unit} vs Spec Max {spec_max} {unit} ? forecast exceeds limit"
+            elif pred_168h > spec_max * 0.9:
+                spec_str = f"{unit} vs Spec Max {spec_max} {unit} ? forecast is near limit"
+            else:
+                spec_str = f"{unit} vs Spec Max {spec_max} {unit}"
+                
         md = f"""# AGNI PARIKSHA - QA Disposition Card
 **Component ID**: `{comp_id}`
 **Family**: `{family}`
@@ -29,8 +45,8 @@ class QACardGenerator:
 
 ## 2. Quantitative Forecast
 - **Measured at 24h**: {measured_24h:.2f}
-- **Predicted 168h**: {pred_168h:.2f}
-- **Conformal Interval (90%)**: +/- {conformal_90:.2f}
+- **Predicted 168h**: {pred_168h:.2f} {spec_str}
+- **Conformal Interval (90%)**: {conf_str}
 - **Safety Slope Margin**: {margin:.4f} (allowed - measured max slope)
 
 ## 3. Explanability & Physics Trace
@@ -44,14 +60,35 @@ Base model prediction before features: {explanation['base_value']:.2f}
             narrative = explainer.get_physics_narrative(name, val)
             md += f"- **{name}** (Impact: {val:+.2f}): {narrative}\n"
             
+
+        md += f"\n## Suspected Mechanism (Family Physics Prior)\n"
+        if family == "DIGITAL_IC":
+            md += "drift pattern consistent with thermally-accelerated leakage growth (Arrhenius-like)\n"
+        elif family == "MEMS_GYROSCOPE":
+            md += "consistent with mechanical relaxation (viscoelastic creep)\n"
+        elif family == "IMAGE_SENSOR":
+            md += "consistent with dark-current growth (SRH trap generation)\n"
+        elif family == "MIXED_SIGNAL_IC":
+            md += "consistent with current-density stress (electromigration-like)\n"
+        elif family == "PRECISION_VOLTAGE_REF":
+            md += "consistent with thermal stress / hysteresis drift\n"
+        md += "\n*Disclaimer: Mechanism hypotheses are family-prior heuristics, not causal identifications.*\n"
+        
         if "FULL_BURN_IN" in verdict:
             md += f"\n## Mandatory Routing\n"
-            md += f"**Reason**: {verdict}. This family/component cannot be certified early. Route to full 168h burn-in."
+            triggers = []
+            if module_a_outlier: triggers.append("Module A outlier")
+            if safety_slope_breach: triggers.append("Safety slope breach")
+            
+            if triggers:
+                md += f"**Reason**: triggered {', '.join(triggers)}; disposition overridden to FULL_BURN_IN by capability routing policy."
+            else:
+                md += f"**Reason**: {verdict}. This family/component cannot be certified early. Route to full 168h burn-in."
         else:
             md += f"\n## Recommended Disposition\n"
-            if "RED" in risk_tier:
+            if "RED" in verdict:
                 md += f"**REJECT**. Drift exceeds safety bounds and conformal coverage cannot guarantee spec compliance."
-            elif "YELLOW" in risk_tier:
+            elif "MEDIUM" in risk_tier or "FULL_BURN_IN" in verdict:
                 md += f"**EXTEND TEST**. Anomalous behavior detected, but not yet failing safety limits. Continue screening."
             else:
                 md += f"**PASS (EARLY termination allowed)**. Component is stable and drift trajectory is safely within physical limits."
@@ -61,4 +98,4 @@ Base model prediction before features: {explanation['base_value']:.2f}
         with open(file_path, "w") as f:
             f.write(md)
             
-        return file_path
+        return md

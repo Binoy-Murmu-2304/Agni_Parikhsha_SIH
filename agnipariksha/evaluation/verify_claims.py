@@ -80,7 +80,12 @@ if __name__ == "__main__":
         module_a = DynamicOutlierDetector()
         evaluator = AgniEvaluator()
         
-        failed = ['DIGITAL_IC', 'MIXED_SIGNAL_IC', 'PRECISION_VOLTAGE_REF']
+        import json
+        with open('metrics_canonical.json', 'r') as mf:
+            canonical = json.load(mf)
+            
+        failed = [fam for fam in FAMILY_SPECS.keys() if canonical.get(fam, {}).get('MAE', 0) / FAMILY_SPECS[fam]['spec_max'] > 0.20]
+        
         realized_savings = 0.0
         share_f = 1 / len(FAMILY_SPECS)
         for fam in FAMILY_SPECS.keys():
@@ -96,7 +101,7 @@ if __name__ == "__main__":
                 exit_rate = 1.0 - df_res['final_flag'].mean()
             realized_savings += share_f * exit_rate * chamber_savings
         
-        print(f"Realized Chamber Savings (B3 formulation at 5% prev): {realized_savings:.2f}%")
+        print(f"Realized Chamber Savings (5% defect injection mix on healthy pool (approx 2.9% effective)): {realized_savings:.2f}%")
         
         # small checks
         import json

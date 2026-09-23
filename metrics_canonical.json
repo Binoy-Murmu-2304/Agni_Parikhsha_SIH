@@ -53,5 +53,7 @@
     "chamber_savings": 85.71428571428571,
     "stress_disjoint": 1.0,
     "realized_savings": 33.64408163265306
-  }
+  },
+  "FINAL_EVAL_escapes": 98,
+  "DEVELOPMENT_escapes": 94
 }

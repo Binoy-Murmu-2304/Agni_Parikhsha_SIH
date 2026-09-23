@@ -156,6 +156,8 @@ class DriftPredictor:
         # Predict future slope using our model
         preds = self.predict_with_conformal(df, family)
         df['pred_168h'] = preds['pred_168h']
+        df['conformal_radius_90'] = preds['conformal_radius_90']
+        df['conformal_radius_95'] = preds['conformal_radius_95']
         df['pred_slope'] = (df['pred_168h'] - df[f'value_{current_hour}h']) / remaining_hours
         
         def evaluate_safety(row):

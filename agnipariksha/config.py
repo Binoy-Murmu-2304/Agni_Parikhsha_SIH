@@ -53,3 +53,13 @@ SHIPPED_K_NOISE = 3.5
 # Evaluator Settings
 DEFAULT_W_FN = 50.0
 
+
+# Phase 4/5 Capability Audit Routing
+# Families where DriftPredictor MAE > 20% of spec_max must never emit GREEN
+CAPABILITY_ROUTING = {
+    "DIGITAL_IC": "MANDATORY_FULL_BURN_IN",
+    "MIXED_SIGNAL_IC": "MANDATORY_FULL_BURN_IN",
+    "PRECISION_VOLTAGE_REF": "MANDATORY_FULL_BURN_IN",
+    "MEMS_GYROSCOPE": "CAPABLE",
+    "IMAGE_SENSOR": "CAPABLE"
+}
