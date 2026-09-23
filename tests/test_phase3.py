@@ -16,15 +16,13 @@ def test_no_leakage():
         "value_168h": [16.0, 17.0]
     })
     
-    # This should fail if we try to extract 24h features but give it a column named "value_96h"? 
-    # Actually extract_features only fails if it explicitly iterates and checks. 
-    # Wait, my extract_features code:
-    # for col in df.columns:
-    #   if h > current_hour: assert False
+    # Call extract_features
+    features = predictor.extract_features(df, current_hour=24)
     
-    # So calling extract_features with current_hour=24 on a DF with value_96h SHOULD raise an assertion error.
-    with pytest.raises(AssertionError, match="LEAKAGE DETECTED"):
-        predictor.extract_features(df, current_hour=24)
+    # Assert that no column in the returned features contains '96h' or '168h'
+    for col in features.columns:
+        assert "96h" not in col, f"LEAKAGE DETECTED: {col}"
+        assert "168h" not in col, f"LEAKAGE DETECTED: {col}"
 
 def test_safety_slope_trio():
     """

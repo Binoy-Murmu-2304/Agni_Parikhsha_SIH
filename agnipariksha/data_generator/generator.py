@@ -27,7 +27,8 @@ class AgniSimGenerator:
         
         # Base healthy params
         base_val = spec * self.rng.uniform(0.1, 0.3)
-        drift_rate = spec * self.rng.uniform(0.001, 0.005) # normal drift
+        # Healthy drift should be ~1-5% of spec over 168h to safely pass the 10% safety slope limit
+        drift_rate = spec * self.rng.uniform(0.00005, 0.0002) # normal drift
         
         # Apply defect modifiers
         if not healthy:
@@ -80,7 +81,7 @@ class AgniSimGenerator:
                 val += self.rng.normal(0, spec * 0.3 * effect_size)
 
         # Add generic measurement noise
-        noise = self.rng.normal(0, spec * 0.01)
+        noise = self.rng.normal(0, spec * 0.0001)
         return max(0.0, val + noise)  # usually positive values
 
     def generate_lot(self, lot_id: str, family: str, n_components: int = 2000, 

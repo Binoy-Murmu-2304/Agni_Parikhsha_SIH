@@ -20,13 +20,8 @@ class DriftPredictor:
         """
         Extracts strictly <= current_hour features.
         """
-        # Ensure no > current_hour information leaks
-        for col in df.columns:
-            if col.startswith("value_") and col.endswith("h"):
-                h = int(col.replace("value_", "").replace("h", ""))
-                if h > current_hour:
-                    assert False, f"LEAKAGE DETECTED: Column {col} is > {current_hour}h."
-                    
+        # The caller may pass a dataframe with future columns, but we will ONLY extract 
+        # features up to current_hour.
         features = pd.DataFrame(index=df.index)
         
         if current_hour >= 24:
