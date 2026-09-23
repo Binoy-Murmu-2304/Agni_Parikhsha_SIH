@@ -32,8 +32,22 @@ class DriftPredictor:
         if current_hour >= 24:
             features['val_0h'] = df['value_0h']
             features['val_24h'] = df['value_24h']
-            # derived slope over 24h
             features['slope_24h'] = (df['value_24h'] - df['value_0h']) / 24.0
+            
+            # --- PHYSICS MAPPING FEATURES (Phase 4.2) ---
+            # Electromigration (current-density x time): uses value_24h as proxy for current
+            features['EM_stress'] = df['value_24h'] * current_hour
+            
+            # SRH traps (saturating kinetics f(t) = A(1 - exp(-t/tau)))
+            # Using value_24h as a proxy for the saturation magnitude A
+            features['SRH_kinetics'] = df['value_24h'] * (1.0 - np.exp(-current_hour / 50.0))
+            
+            # Viscoelastic creep (log-time feature)
+            features['creep_log_time'] = features['slope_24h'] * np.log1p(current_hour)
+            
+            # Arrhenius acceleration exp(-Ea/kT) at 125C (398.15K) with Ea=0.7eV
+            arrhenius_factor = np.exp(-0.7 / (8.617e-5 * 398.15))
+            features['arrhenius_drift'] = features['slope_24h'] * arrhenius_factor
             
         if current_hour >= 96:
             features['val_96h'] = df.get('value_96h', np.nan)
