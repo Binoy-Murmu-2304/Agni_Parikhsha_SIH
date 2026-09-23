@@ -1,0 +1,36 @@
+[project]
+name = "agni-pariksha"
+version = "0.1.0"
+description = "AI-Driven Anomaly Detection & Drift Prediction for Component Burn-In / ESS"
+authors = [
+    {name = "Team AGNI PARIKSHA", email = "team@example.com"}
+]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "numpy",
+    "pandas",
+    "scikit-learn",
+    "scipy",
+    "xgboost",
+    "shap",
+    "fastapi",
+    "uvicorn",
+    "pydantic"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov"
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+addopts = "-W error -v"
+testpaths = [
+    "tests",
+]
