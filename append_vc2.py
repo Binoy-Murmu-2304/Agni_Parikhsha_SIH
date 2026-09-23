@@ -37,9 +37,8 @@
             else:
                 df_fam = df_blind[df_blind['family'] == fam]
                 n_def = 100
-                n_neg = 1900
+                df_neg = df_fam[df_fam['is_defective'] == 0]
                 df_def = df_fam[df_fam['is_defective'] == 1].sample(n=n_def, random_state=42)
-                df_neg = df_fam[df_fam['is_defective'] == 0].sample(n=n_neg, random_state=42)
                 df_eval = pd.concat([df_def, df_neg])
                 df_res = evaluator.end_to_end_disposition(df_eval, module_a, module_b, k_noise=3.5)
                 exit_rate = 1.0 - df_res['final_flag'].mean()

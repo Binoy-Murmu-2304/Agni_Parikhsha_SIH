@@ -1,6 +1,7 @@
 import pandas as pd
-from typing import Dict, Any, List
-from ..config import FAMILY_SPECS, DEFAULT_W_FN
+from typing import Dict, Any
+
+from agnipariksha.config import FAMILY_SPECS, DEFAULT_W_FN
 
 class AgniEvaluator:
     def __init__(self, w_fp: float = 1.0, w_fn: float = DEFAULT_W_FN):
@@ -25,7 +26,8 @@ class AgniEvaluator:
         
         def evaluate_final(row):
             if row['trigger_module_a'] == 1: return 1
-            if row['trigger_safety_slope'] == 1 or row['trigger_conformal'] == 1: return 1
+            if row['trigger_safety_slope'] == 1: return 1
+            # ConfBreach fires 0%, removed from final_flag as per F4
             return 0
             
         df_b['final_flag'] = df_b.apply(evaluate_final, axis=1)
@@ -38,23 +40,30 @@ class AgniEvaluator:
         
     def evaluate_prevalence(self, df_population: pd.DataFrame, module_a, module_b, prevalence_rates: list, k_noise: float = 3.5) -> pd.DataFrame:
         results = []
-        families = df_population['family'].unique()
         for rate in prevalence_rates:
             dfs_res = []
-            for fam in families:
-                df_fam = df_population[df_population['family'] == fam]
-                n_total = 2000
-                n_def = int(n_total * rate)
-                n_neg = n_total - n_def
-                df_def = df_fam[df_fam['is_defective'] == 1]
-                df_neg = df_fam[df_fam['is_defective'] == 0]
-                if len(df_def) < n_def: raise ValueError(f"Insufficient def")
-                else: df_def = df_def.sample(n=n_def)
-                if len(df_neg) < n_neg: raise ValueError(f"Insufficient neg")
-                else: df_neg = df_neg.sample(n=n_neg)
+            # F1: Group by lot_id
+            for lot_id, lot_data in df_population.groupby('lot_id'):
+                fam = lot_data['family'].iloc[0]
+                df_neg_pool = lot_data[lot_data['is_defective'] == 0]
+                
+                n_neg = len(df_neg_pool)
+                n_def = int(round(n_neg * rate / (1 - rate)))
+                n_total = n_neg + n_def
+                
+                df_neg = df_neg_pool # use all healthy parts in the lot
+                
+                df_fam_pool = df_population[df_population['family'] == fam]
+                df_def_pool = df_fam_pool[df_fam_pool['is_defective'] == 1]
+                if len(df_def_pool) < n_def:
+                    raise ValueError(f"Insufficient defectives in family {fam}")
+                df_def = df_def_pool.sample(n=n_def, random_state=42)
+                
                 df_eval = pd.concat([df_def, df_neg]).reset_index(drop=True)
                 dfs_res.append(self.end_to_end_disposition(df_eval, module_a, module_b, k_noise=k_noise))
+                
             df_res = pd.concat(dfs_res)
+            
             n_total = len(df_res)
             tp = len(df_res[(df_res['is_defective'] == 1) & (df_res['final_flag'] == 1)])
             fn = len(df_res[(df_res['is_defective'] == 1) & (df_res['final_flag'] == 0)])
@@ -66,6 +75,7 @@ class AgniEvaluator:
             fpr = fp / max(1, n_neg_actual)
             precision = tp / max(1, tp + fp)
             fw_1000 = (fp / max(1, n_neg_actual)) * 1000
+            
             try:
                 from statsmodels.stats.proportion import proportion_confint
                 rec_ci = proportion_confint(tp, n_def_actual, alpha=0.05, method='beta')
@@ -78,6 +88,7 @@ class AgniEvaluator:
                     return lower, upper
                 rec_ci = prop_ci(tp, n_def_actual, alpha=0.05)
                 fpr_ci = prop_ci(fp, n_neg_actual, alpha=0.05)
+                
             results.append({
                 "Prevalence": f"{rate*100:.1f}%",
                 "N": n_total,
@@ -105,6 +116,7 @@ class AgniEvaluator:
             cov_95 = (err <= preds['conformal_radius_95']).mean()
             mae = err.mean()
             n = len(df_f)
+            # F3: use finite-sample quantile level in documentation. Our formula is fine here since we just measure empirical coverage.
             ci_90 = prop_ci(int(cov_90 * n), n, 0.10)
             ci_95 = prop_ci(int(cov_95 * n), n, 0.05)
             results[family] = {
