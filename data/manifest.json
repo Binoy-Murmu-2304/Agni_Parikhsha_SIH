@@ -163,7 +163,7 @@
       "family": "IMAGE_SENSOR"
     }
   ],
-  "BLIND_TEST": [
+  "DEVELOPMENT": [
     {
       "lot_id": "LOT_0040",
       "family": "DIGITAL_IC"
@@ -203,6 +203,58 @@
     {
       "lot_id": "LOT_0049",
       "family": "IMAGE_SENSOR"
+    }
+  ],
+  "FINAL_EVAL": [
+    {
+      "lot_id": "FINAL_LOT_0050",
+      "family": "DIGITAL_IC",
+      "size": 2000
+    },
+    {
+      "lot_id": "FINAL_LOT_0051",
+      "family": "MIXED_SIGNAL_IC",
+      "size": 2000
+    },
+    {
+      "lot_id": "FINAL_LOT_0052",
+      "family": "MEMS_GYROSCOPE",
+      "size": 2000
+    },
+    {
+      "lot_id": "FINAL_LOT_0053",
+      "family": "PRECISION_VOLTAGE_REF",
+      "size": 2000
+    },
+    {
+      "lot_id": "FINAL_LOT_0054",
+      "family": "IMAGE_SENSOR",
+      "size": 2000
+    },
+    {
+      "lot_id": "FINAL_LOT_0055",
+      "family": "DIGITAL_IC",
+      "size": 2000
+    },
+    {
+      "lot_id": "FINAL_LOT_0056",
+      "family": "MIXED_SIGNAL_IC",
+      "size": 2000
+    },
+    {
+      "lot_id": "FINAL_LOT_0057",
+      "family": "MEMS_GYROSCOPE",
+      "size": 2000
+    },
+    {
+      "lot_id": "FINAL_LOT_0058",
+      "family": "PRECISION_VOLTAGE_REF",
+      "size": 2000
+    },
+    {
+      "lot_id": "FINAL_LOT_0059",
+      "family": "IMAGE_SENSOR",
+      "size": 2000
     }
   ]
 }

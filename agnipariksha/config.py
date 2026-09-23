@@ -45,3 +45,7 @@ SAFETY_SLOPE_K_ROB = 3.5   # Consistent with robust Z
 
 # Explainer / Scoring
 FN_PENALTY_WEIGHT = 50  # 1 escaped space-grade defect ≈ 50 scrapped good parts
+
+# Shipped operating point (Calibrated on CALIBRATION split)
+SHIPPED_K_NOISE = 3.5
+

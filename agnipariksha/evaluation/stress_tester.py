@@ -10,7 +10,7 @@ class StressTester:
         self.module_a = module_a
         self.module_b = module_b
         
-    def evaluate_stress_set(self, df_stress: pd.DataFrame) -> Dict[str, Any]:
+    def evaluate_stress_set(self, df_stress: pd.DataFrame, k_noise: float = 3.5) -> Dict[str, Any]:
         """
         Runs the frozen model on the generator-independent stress set.
         """
@@ -42,7 +42,7 @@ class StressTester:
                 dfs_res = []
                 # Group by lot (each family has 100 parts per size)
                 for lot_id, lot_data in df_size.groupby("lot_id"):
-                    dfs_res.append(self.evaluator.end_to_end_disposition(lot_data, self.module_a, self.module_b))
+                    dfs_res.append(self.evaluator.end_to_end_disposition(lot_data, self.module_a, self.module_b, k_noise=k_noise))
                     
                 df_res = pd.concat(dfs_res)
                 

@@ -113,7 +113,7 @@ class DriftPredictor:
         
         return res
 
-    def compute_safety_slope(self, df_lot: pd.DataFrame, current_hour: int = 24) -> pd.DataFrame:
+    def compute_safety_slope(self, df_lot: pd.DataFrame, current_hour: int = 24, k_noise: float = 3.5) -> pd.DataFrame:
         """
         Safety Slope Logic: 
         min(headroom_bound, relative_bound)
@@ -151,7 +151,6 @@ class DriftPredictor:
         df['lot_stat_bound'] = median_slope + SAFETY_SLOPE_K_ROB * mad_slope
         
         # R2 Fix: slope_tolerance from lot noise
-        k_noise = 3.5
         df['slope_tolerance'] = k_noise * (1.4826 * mad_slope)
         
         # Predict future slope using our model

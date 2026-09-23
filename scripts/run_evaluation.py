@@ -18,7 +18,7 @@ def main():
         
     train_lots = [item['lot_id'] for item in manifest['TRAIN']]
     cal_lots = [item['lot_id'] for item in manifest['CALIBRATION']]
-    blind_lots = [item['lot_id'] for item in manifest['BLIND_TEST']]
+    blind_lots = [item['lot_id'] for item in manifest['DEVELOPMENT']]
     
     df_train = df_main[df_main['lot_id'].isin(train_lots)]
     df_cal = df_main[df_main['lot_id'].isin(cal_lots)]
