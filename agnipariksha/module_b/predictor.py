@@ -63,7 +63,8 @@ class DriftPredictor:
         for family in df_train['family'].unique():
             df_f_train = df_train[df_train['family'] == family]
             
-            X_train = self.extract_features(df_f_train, current_hour=24)
+            df_features = df_f_train.drop(columns=['value_168h']) if 'value_168h' in df_f_train.columns else df_f_train
+            X_train = self.extract_features(df_features, current_hour=24)
             y_train = df_f_train['value_168h']
             
             # hyperparameters fixed (D4) - just basic defaults for HGB
@@ -74,7 +75,8 @@ class DriftPredictor:
             # Conformal calibration
             df_f_cal = df_cal[df_cal['family'] == family]
             if len(df_f_cal) > 0:
-                X_cal = self.extract_features(df_f_cal, current_hour=24)
+                df_cal_features = df_f_cal.drop(columns=['value_168h']) if 'value_168h' in df_f_cal.columns else df_f_cal
+                X_cal = self.extract_features(df_cal_features, current_hour=24)
                 y_cal = df_f_cal['value_168h']
                 preds_cal = model.predict(X_cal)
                 residuals = np.abs(y_cal - preds_cal)
