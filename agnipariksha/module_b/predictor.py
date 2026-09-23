@@ -150,6 +150,10 @@ class DriftPredictor:
             
         df['lot_stat_bound'] = median_slope + SAFETY_SLOPE_K_ROB * mad_slope
         
+        # R2 Fix: slope_tolerance from lot noise
+        k_noise = 3.5
+        df['slope_tolerance'] = k_noise * (1.4826 * mad_slope)
+        
         # Predict future slope using our model
         preds = self.predict_with_conformal(df, family)
         df['pred_168h'] = preds['pred_168h']
@@ -157,10 +161,8 @@ class DriftPredictor:
         
         def evaluate_safety(row):
             max_slope = max(row['measured_slope'], row['pred_slope'])
-            if max_slope > row['allowed_slope']:
+            if max_slope > (row['allowed_slope'] + row['slope_tolerance']) or max_slope > row['lot_stat_bound']:
                 return 'RED_SAFETY_SLOPE'
-            if max_slope > row['lot_stat_bound']:
-                return 'YELLOW_STAT_SLOPE'
             return 'GREEN'
             
         df['module_b_verdict'] = df.apply(evaluate_safety, axis=1)
