@@ -52,9 +52,6 @@
   "AGNI": {
     "chamber_savings": 85.71428571428571,
     "stress_disjoint": 1.0,
-    "mae_guard": 1.0,
-    "w_fn_ranking": 1.0,
-    "min_branch": 1.0,
-    "realized_savings": 0.0
+    "realized_savings": 33.18
   }
 }

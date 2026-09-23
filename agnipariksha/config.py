@@ -49,3 +49,7 @@ FN_PENALTY_WEIGHT = 50  # 1 escaped space-grade defect ≈ 50 scrapped good part
 # Shipped operating point (Calibrated on CALIBRATION split)
 SHIPPED_K_NOISE = 3.5
 
+
+# Evaluator Settings
+DEFAULT_W_FN = 50.0
+
