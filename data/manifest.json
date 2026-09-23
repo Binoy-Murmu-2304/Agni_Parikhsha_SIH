@@ -1,0 +1,208 @@
+{
+  "TRAIN": [
+    {
+      "lot_id": "LOT_0000",
+      "family": "DIGITAL_IC"
+    },
+    {
+      "lot_id": "LOT_0001",
+      "family": "MIXED_SIGNAL_IC"
+    },
+    {
+      "lot_id": "LOT_0002",
+      "family": "MEMS_GYROSCOPE"
+    },
+    {
+      "lot_id": "LOT_0003",
+      "family": "PRECISION_VOLTAGE_REF"
+    },
+    {
+      "lot_id": "LOT_0004",
+      "family": "IMAGE_SENSOR"
+    },
+    {
+      "lot_id": "LOT_0005",
+      "family": "DIGITAL_IC"
+    },
+    {
+      "lot_id": "LOT_0006",
+      "family": "MIXED_SIGNAL_IC"
+    },
+    {
+      "lot_id": "LOT_0007",
+      "family": "MEMS_GYROSCOPE"
+    },
+    {
+      "lot_id": "LOT_0008",
+      "family": "PRECISION_VOLTAGE_REF"
+    },
+    {
+      "lot_id": "LOT_0009",
+      "family": "IMAGE_SENSOR"
+    },
+    {
+      "lot_id": "LOT_0010",
+      "family": "DIGITAL_IC"
+    },
+    {
+      "lot_id": "LOT_0011",
+      "family": "MIXED_SIGNAL_IC"
+    },
+    {
+      "lot_id": "LOT_0012",
+      "family": "MEMS_GYROSCOPE"
+    },
+    {
+      "lot_id": "LOT_0013",
+      "family": "PRECISION_VOLTAGE_REF"
+    },
+    {
+      "lot_id": "LOT_0014",
+      "family": "IMAGE_SENSOR"
+    },
+    {
+      "lot_id": "LOT_0015",
+      "family": "DIGITAL_IC"
+    },
+    {
+      "lot_id": "LOT_0016",
+      "family": "MIXED_SIGNAL_IC"
+    },
+    {
+      "lot_id": "LOT_0017",
+      "family": "MEMS_GYROSCOPE"
+    },
+    {
+      "lot_id": "LOT_0018",
+      "family": "PRECISION_VOLTAGE_REF"
+    },
+    {
+      "lot_id": "LOT_0019",
+      "family": "IMAGE_SENSOR"
+    },
+    {
+      "lot_id": "LOT_0020",
+      "family": "DIGITAL_IC"
+    },
+    {
+      "lot_id": "LOT_0021",
+      "family": "MIXED_SIGNAL_IC"
+    },
+    {
+      "lot_id": "LOT_0022",
+      "family": "MEMS_GYROSCOPE"
+    },
+    {
+      "lot_id": "LOT_0023",
+      "family": "PRECISION_VOLTAGE_REF"
+    },
+    {
+      "lot_id": "LOT_0024",
+      "family": "IMAGE_SENSOR"
+    },
+    {
+      "lot_id": "LOT_0025",
+      "family": "DIGITAL_IC"
+    },
+    {
+      "lot_id": "LOT_0026",
+      "family": "MIXED_SIGNAL_IC"
+    },
+    {
+      "lot_id": "LOT_0027",
+      "family": "MEMS_GYROSCOPE"
+    },
+    {
+      "lot_id": "LOT_0028",
+      "family": "PRECISION_VOLTAGE_REF"
+    },
+    {
+      "lot_id": "LOT_0029",
+      "family": "IMAGE_SENSOR"
+    }
+  ],
+  "CALIBRATION": [
+    {
+      "lot_id": "LOT_0030",
+      "family": "DIGITAL_IC"
+    },
+    {
+      "lot_id": "LOT_0031",
+      "family": "MIXED_SIGNAL_IC"
+    },
+    {
+      "lot_id": "LOT_0032",
+      "family": "MEMS_GYROSCOPE"
+    },
+    {
+      "lot_id": "LOT_0033",
+      "family": "PRECISION_VOLTAGE_REF"
+    },
+    {
+      "lot_id": "LOT_0034",
+      "family": "IMAGE_SENSOR"
+    },
+    {
+      "lot_id": "LOT_0035",
+      "family": "DIGITAL_IC"
+    },
+    {
+      "lot_id": "LOT_0036",
+      "family": "MIXED_SIGNAL_IC"
+    },
+    {
+      "lot_id": "LOT_0037",
+      "family": "MEMS_GYROSCOPE"
+    },
+    {
+      "lot_id": "LOT_0038",
+      "family": "PRECISION_VOLTAGE_REF"
+    },
+    {
+      "lot_id": "LOT_0039",
+      "family": "IMAGE_SENSOR"
+    }
+  ],
+  "BLIND_TEST": [
+    {
+      "lot_id": "LOT_0040",
+      "family": "DIGITAL_IC"
+    },
+    {
+      "lot_id": "LOT_0041",
+      "family": "MIXED_SIGNAL_IC"
+    },
+    {
+      "lot_id": "LOT_0042",
+      "family": "MEMS_GYROSCOPE"
+    },
+    {
+      "lot_id": "LOT_0043",
+      "family": "PRECISION_VOLTAGE_REF"
+    },
+    {
+      "lot_id": "LOT_0044",
+      "family": "IMAGE_SENSOR"
+    },
+    {
+      "lot_id": "LOT_0045",
+      "family": "DIGITAL_IC"
+    },
+    {
+      "lot_id": "LOT_0046",
+      "family": "MIXED_SIGNAL_IC"
+    },
+    {
+      "lot_id": "LOT_0047",
+      "family": "MEMS_GYROSCOPE"
+    },
+    {
+      "lot_id": "LOT_0048",
+      "family": "PRECISION_VOLTAGE_REF"
+    },
+    {
+      "lot_id": "LOT_0049",
+      "family": "IMAGE_SENSOR"
+    }
+  ]
+}
