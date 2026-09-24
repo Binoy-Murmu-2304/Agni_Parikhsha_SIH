@@ -1,5 +1,6 @@
-# AGNI PARIKSHA
+# AGNI PARIKSHA (अग्नि परीक्षा — Trial by Fire)
 
+**अग्नि परीक्षा (Agni Pariksha) — Trial by Fire**
 **AI-Driven Anomaly Detection & Drift Prediction for Component Burn-In / Environmental Stress Screening (ESS)**
 
 Built for **SIH 2026 Problem Statement #26170** (ISRO) by **Team AGNI PARIKSHA**.
@@ -142,6 +143,39 @@ npm run dev
 3. **Minor conformal under-coverage** — finite-sample effects in tight families (87.1% vs 90% target for IMAGE_SENSOR).
 4. **Auto-passable escape rate** — 27.53% [22.95–32.48%] in capable families. Routed families: 0% by construction.
 5. **Conformal trigger excluded from final_flag** — design decision (prior "0 detections" justification was retracted as a bug artifact; see CLAIM_HISTORY).
+
+---
+
+## Cross-Domain Applicability
+
+While built for ISRO's space-grade component screening, AGNI PARIKSHA is a **domain-agnostic ESS triage engine**. Any industry that performs burn-in / Environmental Stress Screening can use the same architecture.
+
+| Domain | Application | Why ESS Screening Matters |
+|--------|-------------|--------------------------|
+| **Aerospace & Space** (ISRO, NASA, ESA) | Satellite & launch vehicle components | Single-point failures cause mission loss. No repair in orbit. |
+| **Defense & Military** | Missile guidance, radar systems, avionics | Must work first time, every time. No second chances. |
+| **Automotive (Safety-Critical)** | ABS controllers, airbag ECUs, ADAS sensors | ISO 26262 functional safety. ASIL-D components must be zero-defect. |
+| **Medical Devices** | Pacemaker electronics, imaging systems | FDA Class III devices. Patient safety is non-negotiable. |
+| **Nuclear Power** | Reactor control system electronics | IEC 61508 SIL-4 safety integrity. No room for failure. |
+| **Telecommunications** | Submarine cable repeaters, satellite ground stations | Undersea cables cost $100M+. One bad component = expensive repair mission. |
+| **Industrial Automation** | Safety PLCs, robotic controllers | Worker safety depends on reliable electronics. |
+
+### How It Works in Any Domain
+```text
+Domain-specific data         Same frozen architecture
+────────────────────         ─────────────────────────
+Space: thermal cycling   ──► Module A: Outlier detection
+Auto: HALT/HASS stress   ──► Module B: Drift prediction
+Medical: HTOL testing    ──► Safety Slope: Rate bounds
+Defense: burn-in 168h    ──► Capability Routing: Go/No-Go
+                         ──► QA Cards + PDF Reports
+```
+
+The **safety policy is universal**:
+- Where the model is confident (MAE < 20% of spec): auto-pass or reject at 24h
+- Where the model is NOT confident: route to full burn-in. Zero risk tolerance.
+
+**The model retrains per domain. The safety architecture does not change.**
 
 ---
 
