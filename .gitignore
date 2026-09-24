@@ -1,28 +1,36 @@
-# .gitignore
+# Dependencies
+node_modules/
+.next/
+dashboard/node_modules/
+dashboard/.next/
+
+# Python
 __pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-env/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-*.egg-info/
-.installed.cfg
-*.egg
-.pytest_cache/
-.coverage
-htmlcov/
-.env
-.venv
+*.pyc
+*.pyo
+.venv/
 venv/
-ENV/
+*.egg-info/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Temp/debug scripts (generated during development, not part of the project)
+patch_*.py
+fix_*.py
+gen_cards.py
+compute_*.py
+chk.py
+find_*.py
+find_sim.py
+find_limit.py
+find_exact.py
+find_detect.py
+find_0det.py
+routed_qa_card.md
+auto_qa_card.md

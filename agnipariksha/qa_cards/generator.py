@@ -50,15 +50,18 @@ class QACardGenerator:
 - **Safety Slope Margin**: {margin:.4f} (allowed - measured max slope)
 
 ## 3. Explanability & Physics Trace
-Base model prediction before features: {explanation['base_value']:.2f}
-
-**Top Contributing Factors:**
 """
-        for feat in explanation['top_features']:
-            name = feat['feature']
-            val = feat['shap_value']
-            narrative = explainer.get_physics_narrative(name, val)
-            md += f"- **{name}** (Impact: {val:+.2f}): {narrative}\n"
+        base_val = explanation.get('base_value', 0.0) if explanation else 0.0
+        md += f"Base model prediction before features: {base_val:.2f}\n\n**Top Contributing Factors:**\n"
+        top_feats = explanation.get('top_features', []) if explanation else []
+        if top_feats:
+            for feat in top_feats:
+                name = feat.get('feature', 'unknown')
+                val = feat.get('shap_value', 0.0)
+                narrative = explainer.get_physics_narrative(name, val) if explainer else "Feature contribution"
+                md += f"- **{name}** (Impact: {val:+.2f}): {narrative}\n"
+        else:
+            md += "- Explanation physics trace not computed for this record\n"
             
 
         md += f"\n## Suspected Mechanism (Family Physics Prior)\n"

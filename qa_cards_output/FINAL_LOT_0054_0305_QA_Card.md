@@ -1,16 +1,16 @@
 # AGNI PARIKSHA - QA Disposition Card
-**Component ID**: `FINAL_LOT_0052_0005`
-**Family**: `MEMS_GYROSCOPE`
+**Component ID**: `FINAL_LOT_0054_0305`
+**Family**: `IMAGE_SENSOR`
 
 ## 1. Verdict & Risk Tier
 **Verdict**: RED
-**Risk Tier**: HIGH
+**Risk Tier**: LOW
 
 ## 2. Quantitative Forecast
-- **Measured at 24h**: 0.45
-- **Predicted 168h**: 0.47 dps vs Spec Max 0.5 dps ? forecast is near limit
-- **Conformal Interval (90%)**: +/- 0.08
-- **Safety Slope Margin**: -0.0016 (allowed - measured max slope)
+- **Measured at 24h**: 12.69
+- **Predicted 168h**: 25.54 nA/cm² vs Spec Max 10.0 nA/cm² ? forecast exceeds limit
+- **Conformal Interval (90%)**: +/- 2.55
+- **Safety Slope Margin**: -0.4184 (allowed - measured max slope)
 
 ## 3. Explanability & Physics Trace
 Base model prediction before features: 0.00
@@ -19,7 +19,7 @@ Base model prediction before features: 0.00
 - Explanation physics trace not computed for this record
 
 ## Suspected Mechanism (Family Physics Prior)
-consistent with mechanical relaxation (viscoelastic creep)
+consistent with dark-current growth (SRH trap generation)
 
 *Disclaimer: Mechanism hypotheses are family-prior heuristics, not causal identifications.*
 

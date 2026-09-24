@@ -1,16 +1,16 @@
 # AGNI PARIKSHA - QA Disposition Card
-**Component ID**: `FINAL_LOT_0050_0020`
+**Component ID**: `FINAL_LOT_0050_0001`
 **Family**: `DIGITAL_IC`
 
 ## 1. Verdict & Risk Tier
 **Verdict**: FULL_BURN_IN
-**Risk Tier**: nan
+**Risk Tier**: MEDIUM
 
 ## 2. Quantitative Forecast
-- **Measured at 24h**: 32.51
-- **Predicted 168h**: 185.33 µA vs Spec Max 50.0 µA ? forecast exceeds limit
+- **Measured at 24h**: 15.21
+- **Predicted 168h**: 33.69 µA vs Spec Max 50.0 µA
 - **Conformal Interval (90%)**: +/- 20.54
-- **Safety Slope Margin**: -1.0080 (allowed - measured max slope)
+- **Safety Slope Margin**: -0.3295 (allowed - measured max slope)
 
 ## 3. Explanability & Physics Trace
 Base model prediction before features: 0.00
