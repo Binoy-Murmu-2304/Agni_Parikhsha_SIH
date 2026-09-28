@@ -1,9 +1,10 @@
+setuptools
+wheel
 numpy
 pandas
 scikit-learn
 scipy
 xgboost
-shap
 fastapi
 uvicorn
 pydantic
