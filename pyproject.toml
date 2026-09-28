@@ -13,7 +13,6 @@ dependencies = [
     "scikit-learn",
     "scipy",
     "xgboost",
-    "shap",
     "fastapi",
     "uvicorn",
     "pydantic"
