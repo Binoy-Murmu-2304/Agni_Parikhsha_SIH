@@ -352,7 +352,14 @@ def get_component_certificate(id: str):
         "pred_168h": pred_str,
         "margin": margin_str,
         "interval": conf_str,
-        "routing_rationale": "Mandatory 168h burn-in per family capability policy" if disp == "FULL_BURN_IN" else "24h early exit certified" if disp == "GREEN" else "Rejected due to drift bounds breach"
+        "routing_rationale": "Mandatory 168h burn-in per family capability policy" if disp == "FULL_BURN_IN" else "24h early exit certified" if disp == "GREEN" else "Rejected due to drift bounds breach",
+        "val_0h": float(row.get('value_0h')) if not pd.isna(row.get('value_0h')) else None,
+        "val_24h": float(row.get('value_24h')) if not pd.isna(row.get('value_24h')) else None,
+        "pred_val": float(pred_val) if pred_val is not None else None,
+        "margin_val": float(margin_val) if margin_val is not None else None,
+        "conformal_radius": float(conf_val) if conf_val is not None else None,
+        "spec_max": float(spec_info.get('spec_max', 50.0)),
+        "unit": unit
     }
 
     with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:

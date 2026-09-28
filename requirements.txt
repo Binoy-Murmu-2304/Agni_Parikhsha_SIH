@@ -5,6 +5,7 @@ pandas
 scikit-learn
 scipy
 xgboost
+matplotlib
 fastapi
 uvicorn
 pydantic
