@@ -13,9 +13,11 @@ Built for **SIH 2026 Problem Statement #26170** (ISRO) by **Team AGNI PARIKSHA**
 
 ISRO screens every electronic component through **168-hour Environmental Stress Screening (burn-in)** to catch early-life failures. This is expensive — thermal chambers are limited, and **85.7% of chamber time is spent on parts that are fine**.
 
-**Can we certify safe components at 24 hours instead of 168?**
+**Can we make a defensible early-screening decision at 24 hours instead of waiting blindly for 168?**
 
-AGNI PARIKSHA answers: **Yes — where the model is confident. And honestly routes everything else to full burn-in.**
+AGNI PARIKSHA answers: **Yes—only where the model passes a family-specific capability guard. Everything else is explicitly routed to full burn-in.**
+
+This is decision support for ESS triage, not a replacement for an organization’s qualification and release procedure.
 
 ---
 
@@ -29,7 +31,7 @@ AGNI PARIKSHA answers: **Yes — where the model is confident. And honestly rout
 | **Conformal Coverage (95%)** | 93.1–94.5% | Per-family, Clopper-Pearson CI |
 | **Escape Rate (auto-passable)** | **27.53%** | [95% CI: 22.95–32.48%] |
 | **Escape Rate (routed families)** | **0%** | Zero by construction |
-| **Test Suite** | **22/22 passed** | Full regression |
+| **Regression Suite** | **24 checks** | Deterministic generator, safety, routing, API, and report paths |
 | **Claims Verified** | **38/38 (100%)** | Reproducible verification pipeline |
 
 ---
@@ -96,7 +98,7 @@ AGNI PARIKSHA answers: **Yes — where the model is confident. And honestly rout
 - Full trace on QA Disposition Cards
 
 ### Evaluation
-- False-negative-penalized scoring (5:1 FN:FP ratio)
+- False-negative-penalized scoring (50:1 FN:FP ratio)
 - Per-family conformal coverage with Clopper-Pearson CIs
 - Escape-FN disaggregation (structural zero for routed families)
 - Prevalence sweep (1%, 5%, 10%, 20%)

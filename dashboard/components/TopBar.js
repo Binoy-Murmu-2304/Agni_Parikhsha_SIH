@@ -14,6 +14,13 @@ export default function TopBar({ activeTab, setActiveTab, commitHash = "c86c4b28
 
       <nav className="nav-tabs">
         <button
+          className={`tab-link ${activeTab === 'mission' ? 'active' : ''}`}
+          onClick={() => setActiveTab('mission')}
+        >
+          MISSION BRIEF
+        </button>
+        <span className="tab-separator">|</span>
+        <button
           className={`tab-link ${activeTab === 'triage' ? 'active' : ''}`}
           onClick={() => setActiveTab('triage')}
         >

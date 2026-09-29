@@ -6,6 +6,7 @@ import KanbanBoard from '../components/KanbanBoard';
 import LotSummaryStrip from '../components/LotSummaryStrip';
 import DrillDownPanel from '../components/DrillDownPanel';
 import ResultsMetricsTab from '../components/ResultsMetricsTab';
+import MissionBrief from '../components/MissionBrief';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 
@@ -19,7 +20,7 @@ export default function Dashboard() {
   const [cardData, setCardData] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [dispositionFilter, setDispositionFilter] = useState(null);
-  const [activeTab, setActiveTab] = useState('triage');
+  const [activeTab, setActiveTab] = useState('mission');
   const [loadingScreen, setLoadingScreen] = useState(false);
   const [loadingComponents, setLoadingComponents] = useState(false);
   const [loadingPdf, setLoadingPdf] = useState(false);
@@ -266,9 +267,18 @@ export default function Dashboard() {
           </div>
         )}
 
+        {/* Judge-facing project narrative */}
+        {activeTab === 'mission' && (
+          <MissionBrief
+            metrics={metrics}
+            onOpenTriage={() => setActiveTab('triage')}
+            onOpenEvidence={() => setActiveTab('results')}
+          />
+        )}
+
         {/* Tab 1: Triage Board */}
         {activeTab === 'triage' && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '16px', alignItems: 'start', width: '100%', minWidth: 0 }}>
+          <div className="triage-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '16px', alignItems: 'start', width: '100%', minWidth: 0 }}>
             {/* Left Side: Three Triage Zones */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', minWidth: 0, width: '100%' }}>
               {/* ZONE 1: FLEET SUMMARY (compact, one line) */}
@@ -290,7 +300,7 @@ export default function Dashboard() {
                     disabled={loadingScreen}
                     style={{ fontSize: '10px', padding: '2px 6px' }}
                   >
-                    {loadingScreen ? "SCREENING LOT..." : "[SCREEN CUSTOM LOT (POST /lots/screen)]"}
+                    {loadingScreen ? "SCREENING SAMPLE LOT..." : "[SCREEN SAMPLE LOT]"}
                   </button>
                 </div>
 

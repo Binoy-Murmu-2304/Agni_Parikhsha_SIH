@@ -29,16 +29,16 @@ export default function ResultsMetricsTab({ metrics }) {
       famCount++;
     }
   });
-  const avgCov95 = famCount > 0 ? ((covSum / famCount) * 100).toFixed(1) : "89.3";
+  const avgCov95 = famCount > 0 ? ((covSum / famCount) * 100).toFixed(1) : "93.9";
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '10px 0' }}>
       {/* ZONE 1: KPI ROW (single line, tabular, 4 columns) */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', borderBottom: '1px solid #1e1e2e', paddingBottom: '12px' }}>
         <div style={{ borderRight: '1px solid #1e1e2e', paddingRight: '12px' }}>
-          <div style={{ fontSize: '11px', color: '#6b7280', letterSpacing: '1px', textTransform: 'uppercase' }}>ESCAPE RATE</div>
-          <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#ff1744', margin: '2px 0' }}>27.53%</div>
-          <div style={{ fontSize: '10px', color: '#6b7280' }}>[22.95–32.48%]</div>
+          <div style={{ fontSize: '11px', color: '#6b7280', letterSpacing: '1px', textTransform: 'uppercase' }}>CAPABILITY GUARD</div>
+          <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#ffab00', margin: '2px 0' }}>3 / 5</div>
+          <div style={{ fontSize: '10px', color: '#6b7280' }}>families stay at mandatory 168h</div>
         </div>
 
         <div style={{ borderRight: '1px solid #1e1e2e', paddingRight: '12px' }}>
@@ -48,15 +48,15 @@ export default function ResultsMetricsTab({ metrics }) {
         </div>
 
         <div style={{ borderRight: '1px solid #1e1e2e', paddingRight: '12px' }}>
-          <div style={{ fontSize: '11px', color: '#6b7280', letterSpacing: '1px', textTransform: 'uppercase' }}>CONFORMAL COVERAGE</div>
+          <div style={{ fontSize: '11px', color: '#6b7280', letterSpacing: '1px', textTransform: 'uppercase' }}>MEAN 95% COVERAGE</div>
           <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#ffab00', margin: '2px 0' }}>{avgCov95}%</div>
-          <div style={{ fontSize: '10px', color: '#6b7280' }}>[pooled 90% target]</div>
+          <div style={{ fontSize: '10px', color: '#6b7280' }}>empirical, per-family mean</div>
         </div>
 
         <div>
-          <div style={{ fontSize: '11px', color: '#6b7280', letterSpacing: '1px', textTransform: 'uppercase' }}>TEST SUITE</div>
-          <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#00e676', margin: '2px 0' }}>22/22</div>
-          <div style={{ fontSize: '10px', color: '#6b7280' }}>[100% passed]</div>
+          <div style={{ fontSize: '11px', color: '#6b7280', letterSpacing: '1px', textTransform: 'uppercase' }}>REGRESSION CHECKS</div>
+          <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#00e676', margin: '2px 0' }}>24</div>
+          <div style={{ fontSize: '10px', color: '#6b7280' }}>automated checks in repository</div>
         </div>
       </div>
 

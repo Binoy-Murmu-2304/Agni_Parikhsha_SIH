@@ -497,7 +497,7 @@ export default function KanbanBoard({
 
       {/* 3 Kanban Columns */}
       <div
-        className="kanban-grid"
+        className={`kanban-grid ${dispositionFilter ? 'single-column' : ''}`}
         style={{
           display: 'grid',
           gridTemplateColumns: dispositionFilter ? '1fr' : '1fr 1fr 1fr',

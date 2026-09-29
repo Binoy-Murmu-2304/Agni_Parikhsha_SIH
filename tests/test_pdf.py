@@ -1,7 +1,7 @@
-import os
+from pathlib import Path
 from agnipariksha.qa_cards.pdf_export import generate_pdf_certificate
 
-def test_deterministic_pdf_render():
+def test_deterministic_pdf_render(tmp_path):
     data = {
         'component_id': 'TEST_COMP',
         'lot_id': 'TEST_LOT',
@@ -14,15 +14,14 @@ def test_deterministic_pdf_render():
         'routing_rationale': 'none'
     }
     
-    generate_pdf_certificate(data, 'test_render_1.pdf')
-    generate_pdf_certificate(data, 'test_render_2.pdf')
+    first_pdf = tmp_path / 'test_render_1.pdf'
+    second_pdf = tmp_path / 'test_render_2.pdf'
+    generate_pdf_certificate(data, str(first_pdf))
+    generate_pdf_certificate(data, str(second_pdf))
     
-    with open('test_render_1.pdf', 'rb') as f:
+    with Path(first_pdf).open('rb') as f:
         b1 = f.read()
-    with open('test_render_2.pdf', 'rb') as f:
+    with Path(second_pdf).open('rb') as f:
         b2 = f.read()
         
     assert b1 == b2, "PDF renders are not byte-identical"
-    
-    os.remove('test_render_1.pdf')
-    os.remove('test_render_2.pdf')

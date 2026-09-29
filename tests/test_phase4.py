@@ -1,12 +1,11 @@
 import pytest
 import pandas as pd
 import numpy as np
-import os
 from agnipariksha.module_b.predictor import DriftPredictor
 from agnipariksha.explainability.explainer import AgniExplainer
 from agnipariksha.qa_cards.generator import QACardGenerator
 
-def test_physics_mapping_and_shap():
+def test_physics_mapping_and_shap(tmp_path):
     """
     Test Phase 4.1, 4.2, 4.3:
     - SHAP runs on a mock component.
@@ -15,11 +14,12 @@ def test_physics_mapping_and_shap():
     """
     # Create mock train data to fit predictor
     family = "IMAGE_SENSOR"
+    rng = np.random.default_rng(42)
     df_train = pd.DataFrame({
         "family": [family]*100,
-        "value_0h": np.random.uniform(5, 10, 100),
-        "value_24h": np.random.uniform(6, 11, 100),
-        "value_168h": np.random.uniform(7, 15, 100)
+        "value_0h": rng.uniform(5, 10, 100),
+        "value_24h": rng.uniform(6, 11, 100),
+        "value_168h": rng.uniform(7, 15, 100)
     })
     df_cal = df_train.copy()
     
@@ -55,7 +55,7 @@ def test_physics_mapping_and_shap():
     assert "increasing" in narrative or "decreasing" in narrative
     
     # Generate QA Card
-    card_gen = QACardGenerator(out_dir="test_qa_cards")
+    card_gen = QACardGenerator(out_dir=str(tmp_path / "qa_cards"))
     comp_id = "TEST_COMP_001"
     filepath = card_gen.generate_card(
         comp_id=comp_id,
